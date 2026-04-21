@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Revive IV Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="assets/reviveiv-logo.png" alt="Revive IV Logo">
+            <div class="sidebar-tagline">Admin Portal</div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item active">Overview</a></li>
+            <li><a href="products.html" class="nav-item">Products & Pricing</a></li>
+            <li><a href="bookings.html" class="nav-item">Bookings</a></li>
+            <li><a href="inquiries.html" class="nav-item">Inquiries</a></li>
+        </ul>
+        <button id="logout-btn" class="nav-item logout-btn">Sign Out</button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <h1 class="page-title">Dashboard Overview</h1>
+            <div style="color: var(--text-secondary);">Welcome back, Administrator</div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Total Bookings</div>
+                <div class="stat-value" id="total-bookings">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Pending Inquiries</div>
+                <div class="stat-value" id="pending-inquiries">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Active Products</div>
+                <div class="stat-value" id="active-products">0</div>
+            </div>
+        </div>
+
+        <div class="table-container" style="padding: 2rem; background: var(--bg-card); border-radius: 20px;">
+            <h2 style="margin-bottom: 1rem; font-size: 1.2rem;">Quick Actions</h2>
+            <div style="display: flex; gap: 1rem;">
+                <a href="products.html" class="btn-primary" style="text-align:center; text-decoration:none; display:inline-block; width:auto; padding: 1rem 2rem;">Manage Products</a>
+                <a href="bookings.html" class="btn-primary" style="text-align:center; text-decoration:none; display:inline-block; width:auto; padding: 1rem 2rem; background: rgba(255,255,255,0.1); color: white;">View Bookings</a>
+            </div>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>

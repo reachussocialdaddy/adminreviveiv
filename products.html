@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products | Revive IV Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="assets/reviveiv-logo.png" alt="Revive IV Logo">
+            <div class="sidebar-tagline">Admin Portal</div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item">Overview</a></li>
+            <li><a href="products.html" class="nav-item active">Products & Pricing</a></li>
+            <li><a href="bookings.html" class="nav-item">Bookings</a></li>
+            <li><a href="inquiries.html" class="nav-item">Inquiries</a></li>
+        </ul>
+        <button id="logout-btn" class="nav-item logout-btn">Sign Out</button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">Products & Pricing</h1>
+                <p style="color: var(--text-secondary); margin-top:0.5rem;">Manage your active treatments, shots, and pricing.</p>
+            </div>
+            <button id="add-product-btn" class="btn-primary" style="width: auto; padding: 0.8rem 1.5rem;">+ Add Product</button>
+        </header>
+
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="products-tbody">
+                    <!-- Loaded via JS -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- Product Modal -->
+    <div class="modal-overlay" id="product-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modal-title">Add New Product</h2>
+                <button class="modal-close" id="close-modal">&times;</button>
+            </div>
+            <form id="product-form">
+                <input type="hidden" id="prod-id">
+                <div class="form-group">
+                    <label class="form-label" for="prod-name">Product Name</label>
+                    <input type="text" id="prod-name" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="prod-category">Category</label>
+                    <select id="prod-category" class="form-input" required>
+                        <option value="IV Drip">IV Drip</option>
+                        <option value="Shot">Shot Bar</option>
+                        <option value="Add-on">Add-on</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="prod-price">Price ($)</label>
+                    <input type="number" id="prod-price" class="form-input" required min="0" step="0.01">
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 1rem;">Save Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

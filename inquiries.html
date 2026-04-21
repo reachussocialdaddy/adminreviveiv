@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inquiries | Revive IV Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <img src="assets/reviveiv-logo.png" alt="Revive IV Logo">
+            <div class="sidebar-tagline">Admin Portal</div>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="dashboard.html" class="nav-item">Overview</a></li>
+            <li><a href="products.html" class="nav-item">Products & Pricing</a></li>
+            <li><a href="bookings.html" class="nav-item">Bookings</a></li>
+            <li><a href="inquiries.html" class="nav-item active">Inquiries</a></li>
+        </ul>
+        <button id="logout-btn" class="nav-item logout-btn">Sign Out</button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">Inquiries Received</h1>
+                <p style="color: var(--text-secondary); margin-top:0.5rem;">Customer contact requests and messages.</p>
+            </div>
+        </header>
+
+        <div class="table-container">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Contact</th>
+                        <th>Subject</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="inquiries-tbody">
+                    <!-- Loaded via JS -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revive IV | Admin Login</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="login-body">
+    <div class="login-container">
+        <div class="login-logo">
+            <img src="assets/reviveiv-logo.png" alt="Revive IV Logo">
+            <div class="login-title">Administrator Access</div>
+        </div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input type="text" id="username" class="form-input" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" class="form-input" placeholder="Enter password" required>
+            </div>
+            <div id="error-msg" class="error-message">Invalid credentials. Please try again.</div>
+            <button type="submit" class="btn-primary" style="margin-top: 1rem;">Secure Login</button>
+        </form>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>
