@@ -73,12 +73,14 @@ const MOCK_DATA = {
         }
     ],
     products: [
-        { id: "p1", name: "Myers Cocktail", price: 399, category: "IV Drips", status: "Active" },
-        { id: "p2", name: "Brain Focus", price: 400, category: "IV Drips", status: "Active" },
-        { id: "p3", name: "Liquid Gold", price: 259, category: "IV Drips", status: "Active" },
-        { id: "p4", name: "Beautify", price: 299, category: "IV Drips", status: "Active" },
-        { id: "p5", name: "Vitamin B12", price: 35, category: "Wellness Shots", status: "Active" },
-        { id: "p6", name: "Glutathione", price: 50, category: "Wellness Shots", status: "Active" }
+        { id: "p1", name: "Custom Drips", price: 175, category: "IV Drips", status: "Active" },
+        { id: "p2", name: "Myers Cocktail", price: 399, category: "IV Drips", status: "Active" },
+        { id: "p3", name: "Brain Focus", price: 400, category: "IV Drips", status: "Active" },
+        { id: "p4", name: "Revive Calm", price: 279, category: "IV Drips", status: "Active" },
+        { id: "p5", name: "Revive Defense", price: 299, category: "IV Drips", status: "Active" },
+        { id: "p6", name: "Beautify", price: 299, category: "IV Drips", status: "Active" },
+        { id: "p7", name: "Liquid Gold", price: 259, category: "IV Drips", status: "Active" },
+        { id: "p8", name: "Revive Recovery", price: 279, category: "IV Drips", status: "Active" }
     ]
 };
 
