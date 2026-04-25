@@ -127,16 +127,17 @@ const loadBookings = async () => {
     tbody.innerHTML = '';
 
     bookings.forEach(b => {
-        const statusClass = b.status === 'Completed' ? 'badge-completed' : 'badge-pending';
+        const isCompleted = b.status === 'Completed';
+        const statusClass = isCompleted ? 'badge-completed' : 'badge-pending';
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>BK-${b.id.substring(0, 4)}</td>
             <td><strong>${b.customer_name}</strong><br><small>${b.email}</small></td>
             <td>${b.cart_items ? b.cart_items.map(i => i.name).join(', ') : 'Custom'}</td>
             <td>${b.date} at ${b.timeslot}</td>
-            <td><span class="badge ${statusClass}">${b.status}</span></td>
+            <td><span class="badge ${statusClass}" onclick="updateStatus('bookings', '${b.id}', '${isCompleted ? 'Pending' : 'Completed'}')" style="cursor:pointer" title="Click to change status">${b.status}</span></td>
             <td>
-                <button class="btn-icon" onclick="updateBookingStatus('${b.id}', 'Completed')" title="Mark Completed"><i class="fas fa-check"></i></button>
+                <button class="btn-icon" onclick="updateStatus('bookings', '${b.id}', 'Completed')" title="Mark Completed"><i class="fas fa-check"></i></button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -152,7 +153,8 @@ const loadInquiries = async () => {
     tbody.innerHTML = '';
 
     currentData.enquiries.forEach(i => {
-        const statusClass = i.status === 'Responded' ? 'badge-completed' : 'badge-pending';
+        const isCompleted = i.status === 'Completed' || i.status === 'Responded';
+        const statusClass = isCompleted ? 'badge-completed' : 'badge-pending';
         const tr = document.createElement('tr');
         const date = new Date(i.created_at).toLocaleDateString();
         
@@ -169,7 +171,7 @@ const loadInquiries = async () => {
             </td>
             <td>${i.subject}</td>
             <td>${date}</td>
-            <td><span class="badge ${statusClass}">${i.status}</span></td>
+            <td><span class="badge ${statusClass}" onclick="updateStatus('enquiries', '${i.id}', '${isCompleted ? 'Pending' : 'Completed'}')" style="cursor:pointer" title="Click to change status">${i.status}</span></td>
             <td>
                 <button class="btn-icon" onclick="viewInInquiry('${i.id}')" title="View Message"><i class="fas fa-eye"></i></button>
             </td>
@@ -179,16 +181,26 @@ const loadInquiries = async () => {
 };
 
 // Actions
-window.updateBookingStatus = async (id, status) => {
-    console.log(`Updating booking ${id} to ${status}`);
-    // Simple UI update
-    const badges = document.querySelectorAll('.badge');
-    badges.forEach(b => {
-        if (b.closest('tr').textContent.includes(id.substring(0, 4))) {
-            b.className = `badge badge-completed`;
-            b.textContent = status;
-        }
-    });
+window.updateStatus = async (type, id, newStatus) => {
+    console.log(`Updating ${type} ${id} to ${newStatus}`);
+    
+    try {
+        const response = await fetch(`${API_URL}/api/${type}/${id}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status: newStatus })
+        });
+
+        if (!response.ok) throw new Error('Failed to update status');
+        
+        // Refresh the list to show new status
+        if (type === 'bookings') loadBookings();
+        else loadInquiries();
+        
+    } catch (error) {
+        console.error("Update error:", error);
+        alert("Failed to update status in database. Try again.");
+    }
 };
 
 window.viewInInquiry = (id) => {
