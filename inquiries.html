@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inquiries | Revive IV Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
@@ -14,12 +15,12 @@
             <div class="sidebar-tagline">Admin Portal</div>
         </div>
         <ul class="nav-menu">
-            <li><a href="dashboard.html" class="nav-item">Overview</a></li>
-            <li><a href="products.html" class="nav-item">Products & Pricing</a></li>
-            <li><a href="bookings.html" class="nav-item">Bookings</a></li>
-            <li><a href="inquiries.html" class="nav-item active">Inquiries</a></li>
+            <li><a href="dashboard.html" class="nav-item"><i class="fas fa-chart-line"></i> Overview</a></li>
+            <li><a href="products.html" class="nav-item"><i class="fas fa-box"></i> Products & Pricing</a></li>
+            <li><a href="bookings.html" class="nav-item"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+            <li><a href="inquiries.html" class="nav-item active"><i class="fas fa-envelope"></i> Inquiries</a></li>
         </ul>
-        <button id="logout-btn" class="nav-item logout-btn">Sign Out</button>
+        <button id="logout-btn" class="nav-item logout-btn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
     </aside>
 
     <!-- Main Content -->
@@ -31,6 +32,13 @@
             </div>
         </header>
 
+        <div class="table-controls" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.2rem;">Customer Inquiries</h2>
+            <div class="search-box" style="position: relative; width: 300px;">
+                <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
+                <input type="text" id="inquiry-search" placeholder="Search name, subject..." style="width: 100%; padding: 0.8rem 1rem 0.8rem 2.8rem; background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; color: white; outline: none;">
+            </div>
+        </div>
         <div class="table-container">
             <table class="admin-table">
                 <thead>
@@ -50,6 +58,7 @@
     </main>
 
     <script src="config.js"></script>
+    <script src="mockData.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>

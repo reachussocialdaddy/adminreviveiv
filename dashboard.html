@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Revive IV Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
@@ -14,12 +15,12 @@
             <div class="sidebar-tagline">Admin Portal</div>
         </div>
         <ul class="nav-menu">
-            <li><a href="dashboard.html" class="nav-item active">Overview</a></li>
-            <li><a href="products.html" class="nav-item">Products & Pricing</a></li>
-            <li><a href="bookings.html" class="nav-item">Bookings</a></li>
-            <li><a href="inquiries.html" class="nav-item">Inquiries</a></li>
+            <li><a href="dashboard.html" class="nav-item active"><i class="fas fa-chart-line"></i> Overview</a></li>
+            <li><a href="products.html" class="nav-item"><i class="fas fa-box"></i> Products & Pricing</a></li>
+            <li><a href="bookings.html" class="nav-item"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+            <li><a href="inquiries.html" class="nav-item"><i class="fas fa-envelope"></i> Inquiries</a></li>
         </ul>
-        <button id="logout-btn" class="nav-item logout-btn">Sign Out</button>
+        <button id="logout-btn" class="nav-item logout-btn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
     </aside>
 
     <!-- Main Content -->
@@ -54,6 +55,7 @@
     </main>
 
     <script src="config.js"></script>
+    <script src="mockData.js"></script>
     <script src="admin.js"></script>
 </body>
 </html>
