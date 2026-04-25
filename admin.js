@@ -189,10 +189,68 @@ window.viewInInquiry = (id) => {
                 window.REVIVE_MOCK_DATA.enquiries.find(i => i.id.includes(id));
                 
     if (inq) {
-        alert(`FROM: ${inq.name}\nEMAIL: ${inq.email}\nSUBJECT: ${inq.subject}\nDATE: ${new Date(inq.created_at).toLocaleString()}\n\nMESSAGE:\n${inq.message}`);
+        showDetailsModal('Inquiry Details', inq);
     } else {
-        alert("Inquiry details not found.");
+        console.error("Inquiry details not found.");
     }
+};
+
+// Custom Modal System
+const showDetailsModal = (title, data) => {
+    // Remove existing modal if any
+    const existing = document.querySelector('.modal-overlay');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.className = 'modal-overlay';
+    
+    // Format date
+    const date = new Date(data.created_at).toLocaleString();
+    
+    overlay.innerHTML = `
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">${title}</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-row">
+                    <div class="detail-label">Customer</div>
+                    <div class="detail-value"><strong>${data.name || data.customer_name}</strong></div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value">${data.email}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Subject / Service</div>
+                    <div class="detail-value">${data.subject || 'N/A'}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Date</div>
+                    <div class="detail-value">${date}</div>
+                </div>
+                <div class="detail-label">Message Content</div>
+                <div class="message-box">${data.message}</div>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    
+    // Trigger animation
+    setTimeout(() => overlay.classList.add('active'), 10);
+
+    // Close logic
+    const close = () => {
+        overlay.classList.remove('active');
+        setTimeout(() => overlay.remove(), 300);
+    };
+
+    overlay.querySelector('.close-modal').addEventListener('click', close);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) close();
+    });
 };
 
 // Initialize
