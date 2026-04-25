@@ -22,12 +22,20 @@ const checkAuth = () => {
 // Data Fetching with Mock Fallback
 const fetchData = async (endpoint, mockKey) => {
     try {
-        const res = await fetch(`${API_URL}/api/${endpoint}`);
-        if (!res.ok) throw new Error('API Error');
-        return await res.json();
+        const response = await fetch(`${API_URL}/api/${endpoint}`);
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        
+        // If the database is empty (0 rows), fallback to mock data so the user sees something
+        if (Array.isArray(data) && data.length === 0) {
+            console.log(`Database table ${endpoint} is empty, showing mock data instead.`);
+            return window.REVIVE_MOCK_DATA[mockKey];
+        }
+        
+        return data;
     } catch (error) {
-        console.warn(`Falling back to mock data for: ${endpoint}`);
-        return window.REVIVE_MOCK_DATA ? window.REVIVE_MOCK_DATA[mockKey] : [];
+        console.warn(`Failed to fetch ${endpoint}, using mock data:`, error);
+        return window.REVIVE_MOCK_DATA[mockKey];
     }
 };
 
