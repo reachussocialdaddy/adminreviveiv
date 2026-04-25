@@ -140,21 +140,30 @@ const loadInquiries = async () => {
     const tbody = document.getElementById('inquiries-tbody');
     if (!tbody) return;
 
-    const inquiries = await fetchData('enquiries', 'enquiries');
+    currentData.enquiries = await fetchData('enquiries', 'enquiries');
     tbody.innerHTML = '';
 
-    inquiries.forEach(i => {
+    currentData.enquiries.forEach(i => {
         const statusClass = i.status === 'Responded' ? 'badge-completed' : 'badge-pending';
         const tr = document.createElement('tr');
         const date = new Date(i.created_at).toLocaleDateString();
+        
+        // Try to find phone number in message
+        const phoneMatch = i.message.match(/Phone:\s*([^\n\r]+)/i);
+        const phone = phoneMatch ? phoneMatch[1] : '';
+
         tr.innerHTML = `
             <td>INQ-${i.id.substring(0, 4)}</td>
-            <td><strong>${i.name}</strong><br><small style="color:var(--text-secondary)">${i.email}</small></td>
+            <td>
+                <strong>${i.name}</strong><br>
+                <small style="color:var(--text-secondary)">${i.email}</small>
+                ${phone ? `<br><small style="color:var(--accent-primary)"><i class="fas fa-phone-alt" style="font-size:0.7rem"></i> ${phone}</small>` : ''}
+            </td>
             <td>${i.subject}</td>
             <td>${date}</td>
             <td><span class="badge ${statusClass}">${i.status}</span></td>
             <td>
-                <button class="btn-icon" onclick="viewInquiry('${i.id}')" title="View Message"><i class="fas fa-eye"></i></button>
+                <button class="btn-icon" onclick="viewInInquiry('${i.id}')" title="View Message"><i class="fas fa-eye"></i></button>
             </td>
         `;
         tbody.appendChild(tr);
@@ -164,19 +173,25 @@ const loadInquiries = async () => {
 // Actions
 window.updateBookingStatus = async (id, status) => {
     console.log(`Updating booking ${id} to ${status}`);
-    // Fallback logic for mock data update in UI
-    const row = document.querySelector(`tr:has(td:contains('${id.substring(0, 4)}'))`);
-    if (row) {
-        const badge = row.querySelector('.badge');
-        badge.className = `badge badge-completed`;
-        badge.textContent = status;
-    }
+    // Simple UI update
+    const badges = document.querySelectorAll('.badge');
+    badges.forEach(b => {
+        if (b.closest('tr').textContent.includes(id.substring(0, 4))) {
+            b.className = `badge badge-completed`;
+            b.textContent = status;
+        }
+    });
 };
 
-window.viewInquiry = (id) => {
-    const inq = window.REVIVE_MOCK_DATA.enquiries.find(i => i.id.includes(id));
+window.viewInInquiry = (id) => {
+    // Look in currentData first, then fallback to mock
+    const inq = currentData.enquiries.find(i => i.id === id) || 
+                window.REVIVE_MOCK_DATA.enquiries.find(i => i.id.includes(id));
+                
     if (inq) {
-        alert(`From: ${inq.name}\nSubject: ${inq.subject}\n\nMessage: ${inq.message}`);
+        alert(`FROM: ${inq.name}\nEMAIL: ${inq.email}\nSUBJECT: ${inq.subject}\nDATE: ${new Date(inq.created_at).toLocaleString()}\n\nMESSAGE:\n${inq.message}`);
+    } else {
+        alert("Inquiry details not found.");
     }
 };
 
