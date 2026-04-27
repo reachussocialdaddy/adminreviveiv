@@ -132,6 +132,10 @@ const loadBookings = async () => {
         if (status === 'Confirmed') statusClass = 'badge-active';
         if (status === 'Completed') statusClass = 'badge-completed';
         if (status === 'Pending Payment') statusClass = 'badge-pending';
+        if (status === 'Payment Failed') statusClass = 'badge-failed';
+
+        const sessionStatus = b.session_status || 'Pending';
+        const sessionClass = sessionStatus === 'Done' ? 'badge-completed' : 'badge-pending';
 
         const total = parseFloat(b.total_amount) || 0;
         const paid = parseFloat(b.amount_paid) || 0;
@@ -150,14 +154,40 @@ const loadBookings = async () => {
             <td>$${total.toFixed(2)}</td>
             <td>$${paid.toFixed(2)}</td>
             <td style="color: ${balance > 0 ? '#ff4444' : 'inherit'}; font-weight: ${balance > 0 ? '700' : 'normal'}">$${balance.toFixed(2)}</td>
-            <td><span class="badge ${statusClass}" onclick="updateStatus('bookings', '${b.id}', 'Completed')" style="cursor:pointer" title="Click to complete">${status}</span></td>
+            <td><span class="badge ${statusClass}">${status}</span></td>
             <td>
-                <button class="btn-icon" onclick="updateStatus('bookings', '${b.id}', 'Completed')" title="Mark Completed"><i class="fas fa-check"></i></button>
+                ${sessionStatus === 'Pending' ? 
+                    `<span class="badge ${sessionClass}" onclick="confirmSessionDone('${b.id}')" style="cursor:pointer" title="Click to mark as Done">${sessionStatus}</span>` : 
+                    `<span class="badge ${sessionClass}">${sessionStatus}</span>`
+                }
+            </td>
+            <td>
                 <button class="btn-icon" onclick="viewBookingDetails('${b.id}')" title="View Details"><i class="fas fa-eye"></i></button>
             </td>
         `;
         tbody.appendChild(tr);
     });
+};
+
+window.confirmSessionDone = async (id) => {
+    if (confirm("Are you sure? Should I mark it as session done?")) {
+        await updateSessionStatus(id, 'Done');
+    }
+};
+
+window.updateSessionStatus = async (id, newStatus) => {
+    try {
+        const response = await fetch(`${API_URL}/api/bookings/${id}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ session_status: newStatus })
+        });
+        if (!response.ok) throw new Error('Failed to update session status');
+        loadBookings();
+    } catch (error) {
+        console.error(error);
+        alert("Error updating session status.");
+    }
 };
 
 window.viewBookingDetails = (id) => {
