@@ -142,8 +142,12 @@ const loadBookings = async () => {
         const balance = total - paid;
 
         const tr = document.createElement('tr');
+        const bookingType = b.booking_type || 'Individual';
+        const typeBadgeClass = bookingType === 'Group' ? 'badge-group' : 'badge-individual';
+        
         tr.innerHTML = `
             <td>BK-${b.id.substring(0, 4)}</td>
+            <td><span class="badge ${typeBadgeClass}">${bookingType}</span></td>
             <td>
                 <strong>${b.customer_name}</strong><br>
                 <small>${b.email}</small><br>
@@ -286,8 +290,14 @@ const showDetailsModal = (title, data) => {
         const total = parseFloat(data.total_amount) || 0;
         const paid = parseFloat(data.amount_paid) || 0;
         const balance = total - paid;
+        const bookingType = data.booking_type || 'Individual';
+        
         extraDetails = `
             <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed var(--glass-border);">
+                <div class="detail-row">
+                    <div class="detail-label">Booking Type</div>
+                    <div class="detail-value"><span class="badge ${bookingType === 'Group' ? 'badge-group' : 'badge-individual'}">${bookingType}</span></div>
+                </div>
                 <div class="detail-row">
                     <div class="detail-label">Total Cost</div>
                     <div class="detail-value">$${total.toFixed(2)}</div>
