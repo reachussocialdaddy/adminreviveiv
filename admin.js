@@ -127,21 +127,40 @@ const loadBookings = async () => {
     tbody.innerHTML = '';
 
     bookings.forEach(b => {
-        const isCompleted = b.status === 'Completed';
-        const statusClass = isCompleted ? 'badge-completed' : 'badge-pending';
+        const status = b.status || 'Pending';
+        let statusClass = 'badge-pending';
+        if (status === 'Confirmed') statusClass = 'badge-active';
+        if (status === 'Completed') statusClass = 'badge-completed';
+        if (status === 'Pending Payment') statusClass = 'badge-pending';
+
+        const total = parseFloat(b.total_amount) || 0;
+        const paid = parseFloat(b.amount_paid) || 0;
+        const balance = total - paid;
+
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>BK-${b.id.substring(0, 4)}</td>
             <td><strong>${b.customer_name}</strong><br><small>${b.email}</small></td>
             <td>${b.cart_items ? b.cart_items.map(i => i.name).join(', ') : 'Custom'}</td>
             <td>${b.date} at ${b.timeslot}</td>
-            <td><span class="badge ${statusClass}" onclick="updateStatus('bookings', '${b.id}', '${isCompleted ? 'Pending' : 'Completed'}')" style="cursor:pointer" title="Click to change status">${b.status}</span></td>
+            <td>$${total.toFixed(2)}</td>
+            <td>$${paid.toFixed(2)}</td>
+            <td style="color: ${balance > 0 ? '#ff4444' : 'inherit'}; font-weight: ${balance > 0 ? '700' : 'normal'}">$${balance.toFixed(2)}</td>
+            <td><span class="badge ${statusClass}" onclick="updateStatus('bookings', '${b.id}', 'Completed')" style="cursor:pointer" title="Click to complete">${status}</span></td>
             <td>
                 <button class="btn-icon" onclick="updateStatus('bookings', '${b.id}', 'Completed')" title="Mark Completed"><i class="fas fa-check"></i></button>
+                <button class="btn-icon" onclick="viewBookingDetails('${b.id}')" title="View Details"><i class="fas fa-eye"></i></button>
             </td>
         `;
         tbody.appendChild(tr);
     });
+};
+
+window.viewBookingDetails = (id) => {
+    const booking = currentData.bookings.find(b => b.id === id);
+    if (booking) {
+        showDetailsModal('Booking Details', booking);
+    }
 };
 
 // Load Inquiries
@@ -226,7 +245,39 @@ const showDetailsModal = (title, data) => {
     
     // Format date
     const date = new Date(data.created_at).toLocaleString();
+    const isBooking = !!data.customer_name;
     
+    let extraDetails = '';
+    if (isBooking) {
+        const total = parseFloat(data.total_amount) || 0;
+        const paid = parseFloat(data.amount_paid) || 0;
+        const balance = total - paid;
+        extraDetails = `
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px dashed var(--glass-border);">
+                <div class="detail-row">
+                    <div class="detail-label">Total Cost</div>
+                    <div class="detail-value">$${total.toFixed(2)}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Advance Paid</div>
+                    <div class="detail-value" style="color: var(--accent-primary)">$${paid.toFixed(2)}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Balance Due</div>
+                    <div class="detail-value" style="color: #ff4444; font-weight: bold;">$${balance.toFixed(2)}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Location</div>
+                    <div class="detail-value">${data.location}</div>
+                </div>
+                <div class="detail-label">Items Ordered</div>
+                <div class="message-box" style="font-size: 0.85rem;">
+                    ${data.cart_items ? data.cart_items.map(i => `• ${i.name} ($${i.price})`).join('<br>') : 'N/A'}
+                </div>
+            </div>
+        `;
+    }
+
     overlay.innerHTML = `
         <div class="modal-content">
             <div class="modal-header">
@@ -243,15 +294,22 @@ const showDetailsModal = (title, data) => {
                     <div class="detail-value">${data.email}</div>
                 </div>
                 <div class="detail-row">
-                    <div class="detail-label">Subject / Service</div>
-                    <div class="detail-value">${data.subject || 'N/A'}</div>
+                    <div class="detail-label">Phone</div>
+                    <div class="detail-value">${data.phone || 'N/A'}</div>
                 </div>
                 <div class="detail-row">
                     <div class="detail-label">Date</div>
                     <div class="detail-value">${date}</div>
                 </div>
+                ${!isBooking ? `
+                <div class="detail-row">
+                    <div class="detail-label">Subject</div>
+                    <div class="detail-value">${data.subject || 'N/A'}</div>
+                </div>
                 <div class="detail-label">Message Content</div>
                 <div class="message-box">${data.message}</div>
+                ` : ''}
+                ${extraDetails}
             </div>
         </div>
     `;
