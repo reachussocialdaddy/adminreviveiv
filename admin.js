@@ -140,7 +140,11 @@ const loadBookings = async () => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>BK-${b.id.substring(0, 4)}</td>
-            <td><strong>${b.customer_name}</strong><br><small>${b.email}</small></td>
+            <td>
+                <strong>${b.customer_name}</strong><br>
+                <small>${b.email}</small><br>
+                <small style="color:var(--accent-primary)">${b.phone || 'N/A'}</small>
+            </td>
             <td>${b.cart_items ? b.cart_items.map(i => i.name).join(', ') : 'Custom'}</td>
             <td>${b.date} at ${b.timeslot}</td>
             <td>$${total.toFixed(2)}</td>
